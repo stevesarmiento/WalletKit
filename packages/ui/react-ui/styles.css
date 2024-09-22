@@ -294,7 +294,6 @@
 }
 
 .wallet-adapter-modal-list .wallet-adapter-modal-burner-wallet:hover .wallet-adapter-button-start-icon {
-    transform: scale(1.1);
     transition: transform 200ms ease;
 }
 
