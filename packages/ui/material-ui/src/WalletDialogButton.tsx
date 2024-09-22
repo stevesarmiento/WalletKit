@@ -5,7 +5,7 @@ import React, { useCallback } from 'react';
 import { useWalletDialog } from './useWalletDialog.js';
 
 export const WalletDialogButton: FC<ButtonProps> = ({
-    children = 'Select Wallet',
+    children = 'Connect Wallet',
     color = 'primary',
     variant = 'contained',
     type = 'button',

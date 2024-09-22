@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import { BaseWalletConnectionButton } from './BaseWalletConnectionButton.js';
 import { useWalletModal } from './useWalletModal.js';
 
-export const WalletModalButton: FC<ButtonProps> = ({ children = 'Select Wallet', onClick, ...props }) => {
+export const WalletModalButton: FC<ButtonProps> = ({ children = 'Connect Wallet', onClick, ...props }) => {
     const { setVisible } = useWalletModal();
 
     const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
