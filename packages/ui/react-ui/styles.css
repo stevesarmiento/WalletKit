@@ -162,14 +162,13 @@
     fill: #fff;
 }
 
-.wallet-adapter-modal-button-close {
+.wallet-adapter-modal-button-close,
+.wallet-adapter-modal-button-info {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
     top: 18px;
-    right: 18px;
-    padding: 12px;
     cursor: pointer;
     background: transparent;
     border: none;
@@ -177,21 +176,45 @@
     transition: background-color 200ms ease;
 }
 
-.wallet-adapter-modal-button-close:focus-visible {
+.wallet-adapter-modal-button-close {
+    right: 18px;
+    padding: 12px;
+}
+
+.wallet-adapter-modal-button-info {
+    left: 18px;
+    padding: 8px;
+}
+
+.wallet-adapter-modal-button-close:focus-visible,
+.wallet-adapter-modal-button-info:focus-visible {
     outline-color: white;
 }
 
-.wallet-adapter-modal-button-close:hover {
+.wallet-adapter-modal-button-close:hover,
+.wallet-adapter-modal-button-info:hover {
     background: #333333;
 }
 
-.wallet-adapter-modal-button-close svg {
+.wallet-adapter-modal-button-close svg,
+.wallet-adapter-modal-button-info svg {
     fill: #777;
     transition: fill 200ms ease 0s;
 }
 
-.wallet-adapter-modal-button-close:hover svg {
+.wallet-adapter-modal-button-close:hover svg,
+.wallet-adapter-modal-button-info:hover svg {
     fill: #fff;
+}
+
+.wallet-adapter-modal-button-close svg {
+    width: 14px;
+    height: 14px;
+}
+
+.wallet-adapter-modal-button-info svg {
+    width: 22px;
+    height: 22px;
 }
 
 .wallet-adapter-modal-overlay {
