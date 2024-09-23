@@ -156,13 +156,13 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
                                 <path d="M14 12.461 8.3 6.772l5.234-5.233L12.006 0 6.772 5.234 1.54 0 0 1.539l5.234 5.233L0 12.006l1.539 1.528L6.772 8.3l5.69 5.7L14 12.461z" />
                             </svg>
                         </button>
-                        <AnimatePresence>
+                        <AnimatePresence mode="popLayout">
                             {showInfo ? (
                                 <motion.div
                                     key="info"
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    initial={{ opacity: 0, scale: 0.9, width: '100%' }}
+                                    animate={{ opacity: 1, scale: 1, width: '100%' }}
+                                    exit={{ opacity: 0, scale: 0.9, width: '100%' }}
                                     transition={{
                                         type: 'spring',
                                         stiffness: 260,
@@ -175,9 +175,9 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
                             ) : allWallets.length ? (
                                 <motion.div
                                     key="wallets"
-                                    initial={{ opacity: 0, scale: 1.1 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 1.1 }}
+                                    initial={{ opacity: 0, scale: 1.1, width: '100%' }}
+                                    animate={{ opacity: 1, scale: 1, width: '100%' }}
+                                    exit={{ opacity: 0, scale: 1.1, width: '100%' }}
                                     transition={{
                                         type: 'spring',
                                         stiffness: 260,
@@ -204,9 +204,9 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
                             ) : (
                                 <motion.div
                                     key="no-wallets"
-                                    initial={{ opacity: 0, scale: 1.2 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 1.2 }}
+                                    initial={{ opacity: 0, scale: 1.2, width: '100%' }}
+                                    animate={{ opacity: 1, scale: 1, width: '100%' }}
+                                    exit={{ opacity: 0, scale: 1.2, width: '100%' }}
                                     transition={{
                                         type: 'spring',
                                         stiffness: 260,
