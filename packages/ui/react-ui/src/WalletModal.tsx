@@ -3,7 +3,7 @@ import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { UnsafeBurnerWalletName } from '@solana/wallet-adapter-wallets';
 import type { FC, MouseEvent } from 'react';
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { WalletListItem } from './WalletListItem.js';
 import { WalletInfoContent } from './WalletInfoModal.js';
@@ -18,6 +18,8 @@ export interface WalletModalProps {
 
 export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 'body' }) => {
     const ref = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [wrapperStyle, setWrapperStyle] = useState({});
     const { wallets, select } = useWallet();
     const { setVisible } = useWalletModal();
     const [fadeIn, setFadeIn] = useState(false);
@@ -81,6 +83,14 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
         [ref]
     );
 
+    useEffect(() => {
+        if (contentRef.current) {
+            const height = contentRef.current.offsetHeight;
+            const width = contentRef.current.offsetWidth;
+            setWrapperStyle({ height: `${height}px`, width: `${width}px` });
+        }
+    }, [showInfo, allWallets.length]);
+
     useLayoutEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -119,7 +129,7 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
                 role="dialog"
             >
                 <div className="wallet-adapter-modal-container">
-                    <div className="wallet-adapter-modal-wrapper">
+                    <div className="wallet-adapter-modal-wrapper" style={wrapperStyle}>
                         <button onClick={handleInfoClick} className="wallet-adapter-modal-button-info">
                             {showInfo ? (
                                 <svg
@@ -156,73 +166,77 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
                                 <path d="M14 12.461 8.3 6.772l5.234-5.233L12.006 0 6.772 5.234 1.54 0 0 1.539l5.234 5.233L0 12.006l1.539 1.528L6.772 8.3l5.69 5.7L14 12.461z" />
                             </svg>
                         </button>
-                        <AnimatePresence mode="popLayout">
-                            {showInfo ? (
-                                <motion.div
-                                    key="info"
-                                    initial={{ opacity: 0, scale: 0.9, width: '100%' }}
-                                    animate={{ opacity: 1, scale: 1, width: '100%' }}
-                                    exit={{ opacity: 0, scale: 0.9, width: '100%' }}
-                                    transition={{
-                                        type: 'spring',
-                                        stiffness: 260,
-                                        damping: 20,
-                                        mass: 1,
-                                    }}
-                                >
-                                    <WalletInfoContent />
-                                </motion.div>
-                            ) : allWallets.length ? (
-                                <motion.div
-                                    key="wallets"
-                                    initial={{ opacity: 0, scale: 1.1, width: '100%' }}
-                                    animate={{ opacity: 1, scale: 1, width: '100%' }}
-                                    exit={{ opacity: 0, scale: 1.1, width: '100%' }}
-                                    transition={{
-                                        type: 'spring',
-                                        stiffness: 260,
-                                        damping: 20,
-                                        mass: 1,
-                                    }}
-                                >
-                                    <h1 className="wallet-adapter-modal-title">Connect a wallet</h1>
-                                    <ul className="wallet-adapter-modal-list">
-                                        {allWallets.map((wallet) => (
-                                            <WalletListItem
-                                                key={wallet.adapter.name}
-                                                handleClick={(event) => handleWalletClick(event, wallet.adapter.name)}
-                                                wallet={wallet}
-                                                className={
-                                                    wallet.adapter.name === UnsafeBurnerWalletName
-                                                        ? 'wallet-adapter-modal-burner-wallet'
-                                                        : ''
-                                                }
-                                            />
-                                        ))}
-                                    </ul>
-                                </motion.div>
-                            ) : (
-                                <motion.div
-                                    key="no-wallets"
-                                    initial={{ opacity: 0, scale: 1.2, width: '100%' }}
-                                    animate={{ opacity: 1, scale: 1, width: '100%' }}
-                                    exit={{ opacity: 0, scale: 1.2, width: '100%' }}
-                                    transition={{
-                                        type: 'spring',
-                                        stiffness: 260,
-                                        damping: 20,
-                                        mass: 1,
-                                    }}
-                                >
-                                    <h1 className="wallet-adapter-modal-title">
-                                        You'll need a wallet on Solana to continue
-                                    </h1>
-                                    <div className="wallet-adapter-modal-middle">
-                                        <WalletSVG />
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                        <div ref={contentRef} style={{ width: '100%' }}>
+                            <AnimatePresence mode="popLayout">
+                                {showInfo ? (
+                                    <motion.div
+                                        key="info"
+                                        initial={{ opacity: 0, scale: 0.9, width: '100%' }}
+                                        animate={{ opacity: 1, scale: 1, width: '100%' }}
+                                        exit={{ opacity: 0, scale: 0.9, width: '100%' }}
+                                        transition={{
+                                            type: 'spring',
+                                            stiffness: 260,
+                                            damping: 20,
+                                            mass: 1,
+                                        }}
+                                    >
+                                        <WalletInfoContent />
+                                    </motion.div>
+                                ) : allWallets.length ? (
+                                    <motion.div
+                                        key="wallets"
+                                        initial={{ opacity: 0, scale: 1.1, width: '100%' }}
+                                        animate={{ opacity: 1, scale: 1, width: '100%' }}
+                                        exit={{ opacity: 0, scale: 1.1, width: '100%' }}
+                                        transition={{
+                                            type: 'spring',
+                                            stiffness: 260,
+                                            damping: 20,
+                                            mass: 1,
+                                        }}
+                                    >
+                                        <h1 className="wallet-adapter-modal-title">Connect a wallet</h1>
+                                        <ul className="wallet-adapter-modal-list">
+                                            {allWallets.map((wallet) => (
+                                                <WalletListItem
+                                                    key={wallet.adapter.name}
+                                                    handleClick={(event) =>
+                                                        handleWalletClick(event, wallet.adapter.name)
+                                                    }
+                                                    wallet={wallet}
+                                                    className={
+                                                        wallet.adapter.name === UnsafeBurnerWalletName
+                                                            ? 'wallet-adapter-modal-burner-wallet'
+                                                            : ''
+                                                    }
+                                                />
+                                            ))}
+                                        </ul>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="no-wallets"
+                                        initial={{ opacity: 0, scale: 1.2, width: '100%' }}
+                                        animate={{ opacity: 1, scale: 1, width: '100%' }}
+                                        exit={{ opacity: 0, scale: 1.2, width: '100%' }}
+                                        transition={{
+                                            type: 'spring',
+                                            stiffness: 260,
+                                            damping: 20,
+                                            mass: 1,
+                                        }}
+                                    >
+                                        <h1 className="wallet-adapter-modal-title">
+                                            You'll need a wallet on Solana to continue
+                                        </h1>
+                                        <div className="wallet-adapter-modal-middle">
+                                            <WalletSVG />
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </div>
                 <div className="wallet-adapter-modal-overlay" onMouseDown={handleClose} />
