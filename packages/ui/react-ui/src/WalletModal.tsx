@@ -6,8 +6,10 @@ import type { FC, MouseEvent } from 'react';
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { WalletListItem } from './WalletListItem.js';
+import { WalletInfoContent } from './WalletInfoModal.js';
 import { WalletSVG } from './WalletSVG.js';
 import { useWalletModal } from './useWalletModal.js';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export interface WalletModalProps {
     className?: string;
@@ -20,6 +22,7 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
     const { setVisible } = useWalletModal();
     const [fadeIn, setFadeIn] = useState(false);
     const [portal, setPortal] = useState<Element | null>(null);
+    const [showInfo, setShowInfo] = useState(false);
 
     const allWallets = useMemo(() => {
         // Filter out unsupported wallets
@@ -38,6 +41,10 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
         },
         [hideModal]
     );
+
+    const handleInfoClick = useCallback(() => {
+        setShowInfo((prevShowInfo) => !prevShowInfo);
+    }, []);
 
     const handleWalletClick = useCallback(
         (event: MouseEvent, walletName: WalletName) => {
@@ -113,50 +120,109 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
             >
                 <div className="wallet-adapter-modal-container">
                     <div className="wallet-adapter-modal-wrapper">
-                        <button className="wallet-adapter-modal-button-info">
-                            <svg
-                                width="35"
-                                height="35"
-                                viewBox="0 0 20.2832 19.9316"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path d="M9.96094 19.9219C15.4102 19.9219 19.9219 15.4004 19.9219 9.96094C19.9219 4.51172 15.4004 0 9.95117 0C4.51172 0 0 4.51172 0 9.96094C0 15.4004 4.52148 19.9219 9.96094 19.9219ZM9.96094 18.2617C5.35156 18.2617 1.66992 14.5703 1.66992 9.96094C1.66992 5.35156 5.3418 1.66016 9.95117 1.66016C14.5605 1.66016 18.2617 5.35156 18.2617 9.96094C18.2617 14.5703 14.5703 18.2617 9.96094 18.2617Z" />
-                                <path d="M9.75586 11.9824C10.2441 11.9824 10.5469 11.6699 10.5469 11.2891C10.5469 11.25 10.5469 11.2012 10.5469 11.1719C10.5469 10.625 10.8594 10.2734 11.543 9.82422C12.4902 9.19922 13.1641 8.63281 13.1641 7.46094C13.1641 5.83984 11.7188 4.96094 10.0586 4.96094C8.37891 4.96094 7.27539 5.76172 7.01172 6.66016C6.96289 6.81641 6.93359 6.97266 6.93359 7.13867C6.93359 7.57812 7.27539 7.8125 7.59766 7.8125C7.92969 7.8125 8.14453 7.65625 8.32031 7.42188L8.49609 7.1875C8.83789 6.62109 9.3457 6.28906 10 6.28906C10.8887 6.28906 11.4648 6.79688 11.4648 7.53906C11.4648 8.20312 11.0547 8.52539 10.2051 9.12109C9.50195 9.60938 8.97461 10.127 8.97461 11.084C8.97461 11.123 8.97461 11.1719 8.97461 11.2109C8.97461 11.7188 9.25781 11.9824 9.75586 11.9824ZM9.73633 14.8926C10.3027 14.8926 10.791 14.4434 10.791 13.877C10.791 13.3105 10.3125 12.8613 9.73633 12.8613C9.16016 12.8613 8.68164 13.3203 8.68164 13.877C8.68164 14.4336 9.16992 14.8926 9.73633 14.8926Z" />
-                            </svg>
+                        <button onClick={handleInfoClick} className="wallet-adapter-modal-button-info">
+                            {showInfo ? (
+                                <svg
+                                    width="35"
+                                    height="35"
+                                    viewBox="0 0 12.3926 16.9629"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <g>
+                                        <rect height="16.9629" opacity="0" width="12.3926" x="0" y="0"></rect>
+                                        <path d="M0 8.47656C0 8.7207 0.0878906 8.93555 0.273438 9.12109L8.01758 16.6895C8.18359 16.8652 8.39844 16.9531 8.65234 16.9531C9.16016 16.9531 9.55078 16.5723 9.55078 16.0645C9.55078 15.8105 9.44336 15.5957 9.28711 15.4297L2.17773 8.47656L9.28711 1.52344C9.44336 1.35742 9.55078 1.13281 9.55078 0.888672C9.55078 0.380859 9.16016 0 8.65234 0C8.39844 0 8.18359 0.0878906 8.01758 0.253906L0.273438 7.83203C0.0878906 8.00781 0 8.23242 0 8.47656Z" />
+                                    </g>
+                                </svg>
+                            ) : (
+                                <svg
+                                    width="35"
+                                    height="35"
+                                    viewBox="0 0 10.9766 18.7012"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <g>
+                                        <rect height="18.7012" opacity="0" width="10.9766" x="0" y="0"></rect>
+                                        <path d="M4.83398 13.3594C5.51758 13.3594 5.83008 12.8906 5.83008 12.2656C5.83008 12.1582 5.83008 12.041 5.83008 11.9336C5.84961 10.6445 6.30859 10.1074 7.87109 9.0332C9.55078 7.90039 10.6152 6.5918 10.6152 4.70703C10.6152 1.77734 8.23242 0.0976562 5.26367 0.0976562C3.05664 0.0976562 1.12305 1.14258 0.292969 3.02734C0.0878906 3.48633 0 3.93555 0 4.30664C0 4.86328 0.322266 5.25391 0.917969 5.25391C1.41602 5.25391 1.74805 4.96094 1.89453 4.48242C2.39258 2.62695 3.62305 1.92383 5.19531 1.92383C7.09961 1.92383 8.59375 2.99805 8.59375 4.69727C8.59375 6.09375 7.72461 6.875 6.47461 7.75391C4.94141 8.81836 3.81836 9.96094 3.81836 11.6797C3.81836 11.8848 3.81836 12.0898 3.81836 12.2949C3.81836 12.9199 4.16016 13.3594 4.83398 13.3594ZM4.83398 18.7012C5.61523 18.7012 6.23047 18.0762 6.23047 17.3145C6.23047 16.543 5.61523 15.9277 4.83398 15.9277C4.07227 15.9277 3.44727 16.543 3.44727 17.3145C3.44727 18.0762 4.07227 18.7012 4.83398 18.7012Z" />
+                                    </g>
+                                </svg>
+                            )}
                         </button>
                         <button onClick={handleClose} className="wallet-adapter-modal-button-close">
                             <svg width="14" height="14">
                                 <path d="M14 12.461 8.3 6.772l5.234-5.233L12.006 0 6.772 5.234 1.54 0 0 1.539l5.234 5.233L0 12.006l1.539 1.528L6.772 8.3l5.69 5.7L14 12.461z" />
                             </svg>
                         </button>
-                        {allWallets.length ? (
-                            <>
-                                <h1 className="wallet-adapter-modal-title">Connect a wallet</h1>
-                                <ul className="wallet-adapter-modal-list">
-                                    {allWallets.map((wallet) => (
-                                        <WalletListItem
-                                            key={wallet.adapter.name}
-                                            handleClick={(event) => handleWalletClick(event, wallet.adapter.name)}
-                                            wallet={wallet}
-                                            className={
-                                                wallet.adapter.name === UnsafeBurnerWalletName
-                                                    ? 'wallet-adapter-modal-burner-wallet'
-                                                    : ''
-                                            }
-                                        />
-                                    ))}
-                                </ul>
-                            </>
-                        ) : (
-                            <>
-                                <h1 className="wallet-adapter-modal-title">
-                                    You'll need a wallet on Solana to continue
-                                </h1>
-                                <div className="wallet-adapter-modal-middle">
-                                    <WalletSVG />
-                                </div>
-                            </>
-                        )}
+                        <AnimatePresence>
+                            {showInfo ? (
+                                <motion.div
+                                    key="info"
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{
+                                        type: 'spring',
+                                        stiffness: 260,
+                                        damping: 20,
+                                        mass: 1,
+                                    }}
+                                >
+                                    <WalletInfoContent />
+                                </motion.div>
+                            ) : allWallets.length ? (
+                                <motion.div
+                                    key="wallets"
+                                    initial={{ opacity: 0, scale: 1.1 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 1.1 }}
+                                    transition={{
+                                        type: 'spring',
+                                        stiffness: 260,
+                                        damping: 20,
+                                        mass: 1,
+                                    }}
+                                >
+                                    <h1 className="wallet-adapter-modal-title">Connect a wallet</h1>
+                                    <ul className="wallet-adapter-modal-list">
+                                        {allWallets.map((wallet) => (
+                                            <WalletListItem
+                                                key={wallet.adapter.name}
+                                                handleClick={(event) => handleWalletClick(event, wallet.adapter.name)}
+                                                wallet={wallet}
+                                                className={
+                                                    wallet.adapter.name === UnsafeBurnerWalletName
+                                                        ? 'wallet-adapter-modal-burner-wallet'
+                                                        : ''
+                                                }
+                                            />
+                                        ))}
+                                    </ul>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="no-wallets"
+                                    initial={{ opacity: 0, scale: 1.2 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 1.2 }}
+                                    transition={{
+                                        type: 'spring',
+                                        stiffness: 260,
+                                        damping: 20,
+                                        mass: 1,
+                                    }}
+                                >
+                                    <h1 className="wallet-adapter-modal-title">
+                                        You'll need a wallet on Solana to continue
+                                    </h1>
+                                    <div className="wallet-adapter-modal-middle">
+                                        <WalletSVG />
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </div>
                 <div className="wallet-adapter-modal-overlay" onMouseDown={handleClose} />

@@ -5,40 +5,6 @@ import React from 'react';
 import pkg from '../../package.json';
 import { useAutoConnect } from '../components/AutoConnectProvider';
 
-const AntDesignWalletConnectButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-ant-design')).WalletConnectButton,
-    { ssr: false }
-);
-const AntDesignWalletDisconnectButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-ant-design')).WalletDisconnectButton,
-    { ssr: false }
-);
-const AntDesignWalletMultiButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-ant-design')).WalletMultiButton,
-    { ssr: false }
-);
-const AntDesignWalletModalButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-ant-design')).WalletModalButton,
-    { ssr: false }
-);
-
-const MaterialUIWalletConnectButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-material-ui')).WalletConnectButton,
-    { ssr: false }
-);
-const MaterialUIWalletDisconnectButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-material-ui')).WalletDisconnectButton,
-    { ssr: false }
-);
-const MaterialUIWalletDialogButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-material-ui')).WalletDialogButton,
-    { ssr: false }
-);
-const MaterialUIWalletMultiButtonDynamic = dynamic(
-    async () => (await import('@solana/wallet-adapter-material-ui')).WalletMultiButton,
-    { ssr: false }
-);
-
 const ReactUIWalletConnectButtonDynamic = dynamic(
     async () => (await import('@solana/wallet-adapter-react-ui')).WalletConnectButton,
     { ssr: false }
@@ -95,24 +61,12 @@ const Index: NextPage = () => {
                     <TableRow>
                         <TableCell>Connect Button</TableCell>
                         <TableCell>
-                            <MaterialUIWalletConnectButtonDynamic />
-                        </TableCell>
-                        <TableCell>
-                            <AntDesignWalletConnectButtonDynamic />
-                        </TableCell>
-                        <TableCell>
                             <ReactUIWalletConnectButtonDynamic />
                         </TableCell>
                         <TableCell></TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>Disconnect Button</TableCell>
-                        <TableCell>
-                            <MaterialUIWalletDisconnectButtonDynamic />
-                        </TableCell>
-                        <TableCell>
-                            <AntDesignWalletDisconnectButtonDynamic />
-                        </TableCell>
                         <TableCell>
                             <ReactUIWalletDisconnectButtonDynamic />
                         </TableCell>
@@ -121,24 +75,12 @@ const Index: NextPage = () => {
                     <TableRow>
                         <TableCell>Dialog/Modal Button</TableCell>
                         <TableCell>
-                            <MaterialUIWalletDialogButtonDynamic />
-                        </TableCell>
-                        <TableCell>
-                            <AntDesignWalletModalButtonDynamic />
-                        </TableCell>
-                        <TableCell>
                             <ReactUIWalletModalButtonDynamic />
                         </TableCell>
                         <TableCell></TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>Multi Button</TableCell>
-                        <TableCell>
-                            <MaterialUIWalletMultiButtonDynamic />
-                        </TableCell>
-                        <TableCell>
-                            <AntDesignWalletMultiButtonDynamic />
-                        </TableCell>
                         <TableCell>
                             <ReactUIWalletMultiButtonDynamic />
                         </TableCell>
