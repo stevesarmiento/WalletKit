@@ -58,8 +58,8 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             transition: { duration: 0.2, delay: 0.2 },
         },
         btcStep1: {
-            x: -156,
-            y: -25,
+            x: -150,
+            y: -22,
             scale: 0.23,
             rotate: -13,
             opacity: 1,
@@ -74,8 +74,8 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             transition: { duration: 0.2, delay: 0.3 },
         },
         ethStep1: {
-            x: -156,
-            y: 11,
+            x: -150,
+            y: 10,
             scale: 0.23,
             rotate: 0,
             opacity: 1,
@@ -90,7 +90,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             transition: { duration: 0.2, delay: 0.4 },
         },
         solStep1: {
-            x: -156,
+            x: -150,
             y: 42,
             scale: 0.23,
             rotate: 0,

@@ -493,7 +493,7 @@
     width: 6px;
     height: 6px;
     margin: 0 5px;
-    transition: transform 200ms ease;
+    transition: all 200ms ease;
 }
 
 .step-indicator.active {
@@ -612,9 +612,9 @@
 .connected-text {
     color: #fff;
     z-index: 3;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
     position: absolute;
-    top: 45px;
-    left: 60%;
+    top: 48px;
+    left: 62%;
 }
