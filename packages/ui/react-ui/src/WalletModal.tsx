@@ -246,11 +246,21 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
                                             mass: 1,
                                         }}
                                     >
-                                        <h1 className="wallet-adapter-modal-title">
-                                            You'll need a wallet on Solana to continue
-                                        </h1>
                                         <div className="wallet-adapter-modal-middle">
+                                            <h1 className="wallet-adapter-modal-title">No Wallets Detected</h1>
                                             <WalletSVG />
+                                            {/* <h1>No Wallets Detected</h1> */}
+                                            <p>
+                                                You'll need add a wallet to your browser to interact with Solana if you
+                                                want to continue using this app.
+                                            </p>
+                                            <div className="wallet-info-separator-container">
+                                                <div className="wallet-info-separator" />
+                                                <div className="wallet-info-navigation">
+                                                    <span className="text-xs">Don't have a wallet?</span>
+                                                </div>
+                                            </div>
+                                            <button className="wallet-info-learn-more">Get one!</button>
                                         </div>
                                     </motion.div>
                                 )}
