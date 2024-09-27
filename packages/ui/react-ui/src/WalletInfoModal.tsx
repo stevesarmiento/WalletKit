@@ -5,17 +5,17 @@ const steps = [
     {
         title: 'What is a Wallet?',
         content:
-            'Wallets let you store, receive, send, and interact with digital assets like NFTs and tokens on Solana.',
+            'Wallets let you store, receive, send, and interact with digital assets like NFTs and tokens within web apps.',
     },
     {
-        title: 'More Secure, Easier to Use.',
+        title: 'Security & Ease of Use.',
         content:
             'With blockchain apps, your wallet is used as a secure and easy way to login and interact with web applications.',
     },
     {
-        title: 'Wallets are Permissionless.',
+        title: 'Decentralized & Permissionless.',
         content:
-            'An essential utility for permissionless blockchain apps. Wallets let you explore and participate in the new web.',
+            'An essential utility for permissionless blockchain usage. Wallets let you explore and participate in the new web.',
     },
 ];
 

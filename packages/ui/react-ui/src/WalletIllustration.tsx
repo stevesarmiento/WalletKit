@@ -7,11 +7,28 @@ interface WalletIllustrationProps {
     currentStep: number;
 }
 
+interface AnimatedEllipseProps {
+    cx: string;
+    cy: string;
+    rx: string;
+    ry: string;
+    transform: string;
+    fill: string;
+    filter: string;
+}
+
 export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
     className = '',
     circleColors = ['#5B48AD', '#DC1FFF', '#00FFA3', '#FECA1A'],
     currentStep,
 }) => {
+    const springTransition = {
+        type: 'spring',
+        stiffness: 150,
+        damping: 19,
+        mass: 1.2,
+    };
+
     const svgVariants = {
         initial: {
             y: 50,
@@ -23,17 +40,48 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             rotate: 20,
             scale: 1,
             transition: {
-                duration: 0.2,
-                ease: 'easeOut',
-                scale: { duration: 0.2, ease: 'easeOut' },
+                springTransition,
             },
         },
         step2: {
             y: -44,
             x: -115,
-            rotate: 0,
+            rotate: 360,
             scale: 0.2,
-            transition: { duration: 0.2, ease: 'easeOut' },
+            transition: {
+                springTransition,
+            },
+        },
+        step3: {
+            y: 0,
+            x: 0,
+            rotate: 0,
+            scale: 0.6,
+            transition: {
+                ...springTransition,
+            },
+        },
+    };
+
+    const containerVariants = {
+        hidden: {},
+        visible: {
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2,
+            },
+        },
+    };
+
+    const ellipseVariants = {
+        hidden: { scale: 0, opacity: 0 },
+        visible: {
+            scale: 1,
+            opacity: 1,
+            transition: {
+                springTransition,
+                delay: 0.2,
+            },
         },
     };
 
@@ -43,8 +91,9 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
     };
 
     const backgroundVariants = {
-        hidden: { opacity: 0, y: 100, scale: 0 },
-        visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.2 } },
+        hidden: { opacity: 0, scale: 0.8 },
+        visible: { opacity: 1, scale: 1, transition: { ...springTransition } },
+        step3: { opacity: 1, scale: 1, transition: { ...springTransition } },
     };
 
     const tokenVariants = {
@@ -55,7 +104,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             scale: 0.8,
             rotate: -5,
             opacity: 1,
-            transition: { duration: 0.2, delay: 0.2 },
+            transition: { springTransition, delay: 0.2 },
         },
         btcStep1: {
             x: -150,
@@ -63,7 +112,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             scale: 0.23,
             rotate: -13,
             opacity: 1,
-            transition: { duration: 0.2, ease: 'easeInOut' },
+            transition: { springTransition },
         },
         ethStep0: {
             x: 48,
@@ -71,7 +120,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             scale: 0.7,
             rotate: 0,
             opacity: 1,
-            transition: { duration: 0.2, delay: 0.3 },
+            transition: { springTransition, delay: 0.3 },
         },
         ethStep1: {
             x: -150,
@@ -79,7 +128,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             scale: 0.23,
             rotate: 0,
             opacity: 1,
-            transition: { duration: 0.2, ease: 'easeInOut' },
+            transition: { springTransition },
         },
         solStep0: {
             x: -150,
@@ -87,7 +136,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             scale: 0.6,
             rotate: -15,
             opacity: 1,
-            transition: { duration: 0.2, delay: 0.4 },
+            transition: { springTransition, delay: 0.4 },
         },
         solStep1: {
             x: -150,
@@ -95,7 +144,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
             scale: 0.23,
             rotate: 0,
             opacity: 1,
-            transition: { duration: 0.2, ease: 'easeInOut' },
+            transition: { springTransition },
         },
     };
 
@@ -104,13 +153,15 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
         visible: {
             opacity: 1,
             y: 0,
-            transition: {
-                duration: 0.2,
-                ease: 'easeOut',
-                delay: 0.1,
-            },
+            transition: { springTransition },
         },
     };
+
+    const AnimatedEllipse: React.FC<AnimatedEllipseProps> = ({ cx, cy, rx, ry, transform, fill, filter }) => (
+        <motion.g filter={filter} variants={ellipseVariants}>
+            <ellipse cx={cx} cy={cy} rx={rx} ry={ry} transform={transform} fill={fill} />
+        </motion.g>
+    );
 
     return (
         <AnimatePresence>
@@ -123,15 +174,15 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                                 style={{
                                     backgroundColor: circleColors[0],
                                     top: '0%',
-                                    left: '10px',
-                                    width: '30px',
-                                    height: '30px',
+                                    left: '50px',
+                                    width: '45px',
+                                    height: '45px',
                                 }}
                                 variants={circleVariants}
                                 initial="hidden"
                                 animate="visible"
                                 exit="hidden"
-                                transition={{ delay: 0.2, duration: 0.2 }}
+                                transition={{ springTransition, delay: 0.2 }}
                             />
                             <motion.div
                                 className="circle"
@@ -139,14 +190,14 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                                     backgroundColor: circleColors[1],
                                     bottom: '10%',
                                     left: '80px',
-                                    width: '10px',
-                                    height: '10px',
+                                    width: '20px',
+                                    height: '20px',
                                 }}
                                 variants={circleVariants}
                                 initial="hidden"
                                 animate="visible"
                                 exit="hidden"
-                                transition={{ delay: 0.3, duration: 0.2 }}
+                                transition={{ springTransition, delay: 0.3 }}
                             />
                         </div>
                         <div className="wallet-illustration-circles right">
@@ -163,7 +214,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                                 initial="hidden"
                                 animate="visible"
                                 exit="hidden"
-                                transition={{ delay: 0.4, duration: 0.2 }}
+                                transition={{ springTransition, delay: 0.4 }}
                             />
                             <motion.div
                                 className="circle"
@@ -178,7 +229,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                                 initial="hidden"
                                 animate="visible"
                                 exit="hidden"
-                                transition={{ delay: 0.5, duration: 0.2 }}
+                                transition={{ springTransition, delay: 0.5 }}
                             />
                         </div>
                     </>
@@ -200,29 +251,30 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                                 d="M0 606C0 622.569 13.4315 636 30 636H874C890.569 636 904 622.569 904 606V66H0V606Z"
                                 fill="url(#paint0_linear_22_93)"
                             />
-                            <g filter="url(#filter0_b_22_93)">
-                                <ellipse
-                                    cx="86.6078"
-                                    cy="177.608"
-                                    rx="52.2014"
-                                    ry="52.2014"
-                                    transform="rotate(78.5154 86.6078 177.608)"
-                                    fill="#171717"
-                                />
-                            </g>
-                            <rect x="503" y="136" width="366" height="89" rx="33" fill="#5B48AD" />
+                            <path d="M41.5 408H864.5" stroke="#414141" />
+                            <path d="M41.5 302H864.5" stroke="#414141" />
+                            <path d="M41.5 509H864.5" stroke="#414141" />
+                            <ellipse
+                                cx="86.6078"
+                                cy="177.608"
+                                rx="52.2014"
+                                ry="52.2014"
+                                transform="rotate(78.5154 86.6078 177.608)"
+                                fill="#5B48AD"
+                            />
+                            <rect x="503" y="136" width="366" height="89" rx="33" fill="#565656" />
                             <rect x="127" y="332" width="117" height="19" rx="9.5" fill="#565656" />
                             <rect x="752" y="332" width="117" height="19" rx="9.5" fill="#565656" />
                             <rect x="752" y="436" width="117" height="19" rx="9.5" fill="#565656" />
                             <rect x="752" y="535" width="117" height="19" rx="9.5" fill="#565656" />
                             <rect x="127" y="436" width="117" height="19" rx="9.5" fill="#565656" />
                             <rect x="127" y="535" width="117" height="19" rx="9.5" fill="#565656" />
-                            <rect x="127" y="359" width="51" height="19" rx="9.5" fill="#353535" />
-                            <rect x="818" y="359" width="51" height="19" rx="9.5" fill="#353535" />
-                            <rect x="818" y="463" width="51" height="19" rx="9.5" fill="#353535" />
-                            <rect x="818" y="562" width="51" height="19" rx="9.5" fill="#353535" />
-                            <rect x="127" y="463" width="51" height="19" rx="9.5" fill="#353535" />
-                            <rect x="127" y="562" width="51" height="19" rx="9.5" fill="#353535" />
+                            <rect x="127" y="359" width="51" height="19" rx="9.5" fill="#3F3F3F" />
+                            <rect x="818" y="359" width="51" height="19" rx="9.5" fill="#3F3F3F" />
+                            <rect x="818" y="463" width="51" height="19" rx="9.5" fill="#3F3F3F" />
+                            <rect x="818" y="562" width="51" height="19" rx="9.5" fill="#3F3F3F" />
+                            <rect x="127" y="463" width="51" height="19" rx="9.5" fill="#3F3F3F" />
+                            <rect x="127" y="562" width="51" height="19" rx="9.5" fill="#3F3F3F" />
                             <path
                                 d="M0 29C0 12.9837 12.9837 0 29 0H875C891.016 0 904 12.9837 904 29V67H0V29Z"
                                 fill="#565656"
@@ -231,29 +283,6 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                             <circle cx="93" cy="35" r="15" fill="#FECA1A" />
                             <circle cx="145" cy="35" r="15" fill="#AFD803" />
                             <defs>
-                                <filter
-                                    id="filter0_b_22_93"
-                                    x="-19.6038"
-                                    y="71.396"
-                                    width="212.423"
-                                    height="212.423"
-                                    filterUnits="userSpaceOnUse"
-                                    colorInterpolationFilters="sRGB"
-                                >
-                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
-                                    <feComposite
-                                        in2="SourceAlpha"
-                                        operator="in"
-                                        result="effect1_backgroundBlur_22_93"
-                                    />
-                                    <feBlend
-                                        mode="normal"
-                                        in="SourceGraphic"
-                                        in2="effect1_backgroundBlur_22_93"
-                                        result="shape"
-                                    />
-                                </filter>
                                 <linearGradient
                                     id="paint0_linear_22_93"
                                     x1="452"
@@ -262,7 +291,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                                     y2="636"
                                     gradientUnits="userSpaceOnUse"
                                 >
-                                    <stop stopColor="#282828" />
+                                    <stop stopColor="#373737" />
                                     <stop offset="1" stopColor="#2B2B2B" />
                                 </linearGradient>
                             </defs>
@@ -278,6 +307,359 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                         </motion.div>
                     </>
                 )}
+                {currentStep === 2 && (
+                    <>
+                        {/* New Background SVG for Step 3 */}
+                        <motion.svg
+                            className="wallet-illustration-new-background"
+                            width="1149"
+                            height="628"
+                            viewBox="0 0 1149 628"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            variants={backgroundVariants}
+                            initial="hidden"
+                            animate="step3"
+                            exit="hidden"
+                            transition={{ ...springTransition }}
+                        >
+                            <motion.g variants={containerVariants} initial="hidden" animate="visible">
+                                <AnimatedEllipse
+                                    cx="283.316"
+                                    cy="42.4392"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(78.5154 283.316 42.4392)"
+                                    fill="#F7931A"
+                                    filter="url(#filter0_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="868.516"
+                                    cy="42.4392"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(78.5154 868.516 42.4392)"
+                                    fill="#F7931A"
+                                    filter="url(#filter1_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="283.316"
+                                    cy="585.777"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(78.5154 283.316 585.777)"
+                                    fill="#2775CA"
+                                    filter="url(#filter2_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="212.674"
+                                    cy="298.845"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(78.5154 212.674 298.845)"
+                                    fill="#E54033"
+                                    filter="url(#filter3_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="936.542"
+                                    cy="297.973"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(-101.485 936.542 297.973)"
+                                    fill="#24DCB3"
+                                    filter="url(#filter4_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="41.7361"
+                                    cy="121.803"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(78.5154 41.7361 121.803)"
+                                    fill="#5B48AD"
+                                    filter="url(#filter5_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="1107.48"
+                                    cy="475.016"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(-101.485 1107.48 475.016)"
+                                    fill="#2775CA"
+                                    filter="url(#filter6_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="41.7361"
+                                    cy="456.701"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(78.5154 41.7361 456.701)"
+                                    fill="#00FFA3"
+                                    filter="url(#filter7_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="1107.48"
+                                    cy="140.118"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(-101.485 1107.48 140.118)"
+                                    fill="#E54033"
+                                    filter="url(#filter8_b_41_39)"
+                                />
+                                <AnimatedEllipse
+                                    cx="868.516"
+                                    cy="585.777"
+                                    rx="35.214"
+                                    ry="35.214"
+                                    transform="rotate(78.5154 868.516 585.777)"
+                                    fill="#F5AC37"
+                                    filter="url(#filter9_b_41_39)"
+                                />
+                            </motion.g>
+                            <path
+                                d="M387.807 132.425L328.492 81M762.449 132.425L827.433 81M803.882 301.515H874.536M275.283 301.515H346.374M387.807 498.498L328.492 546M762.449 498.498L827.433 546M86 161.623L172.791 258.371M86 427.898L172.791 333.329M1066 179.491L980.953 258.371M1066 427.898L980.953 333.329"
+                                stroke="#3D3D3D"
+                                strokeWidth="11"
+                                strokeLinecap="round"
+                            />
+                            <path
+                                d="M575.386 521.581C397.87 521.581 370.871 486.991 370.871 317.066C370.871 147.142 399.717 112.552 575.386 112.552C751.055 112.552 779.901 151.118 779.901 317.066C779.9 483.014 752.902 521.581 575.386 521.581Z"
+                                fill="#3C3C3C"
+                            />
+                            <defs>
+                                <filter
+                                    id="filter0_b_41_39"
+                                    x="194.095"
+                                    y="-46.7817"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter1_b_41_39"
+                                    x="779.295"
+                                    y="-46.7817"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter2_b_41_39"
+                                    x="194.095"
+                                    y="496.556"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter3_b_41_39"
+                                    x="123.453"
+                                    y="209.625"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter4_b_41_39"
+                                    x="847.321"
+                                    y="208.752"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter5_b_41_39"
+                                    x="-47.4848"
+                                    y="32.582"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter6_b_41_39"
+                                    x="1018.26"
+                                    y="385.795"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter7_b_41_39"
+                                    x="-47.4848"
+                                    y="367.48"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter8_b_41_39"
+                                    x="1018.26"
+                                    y="50.897"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                                <filter
+                                    id="filter9_b_41_39"
+                                    x="779.295"
+                                    y="496.556"
+                                    width="178.442"
+                                    height="178.442"
+                                    filterUnits="userSpaceOnUse"
+                                    colorInterpolationFilters="sRGB"
+                                >
+                                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="27" />
+                                    <feComposite
+                                        in2="SourceAlpha"
+                                        operator="in"
+                                        result="effect1_backgroundBlur_41_39"
+                                    />
+                                    <feBlend
+                                        mode="normal"
+                                        in="SourceGraphic"
+                                        in2="effect1_backgroundBlur_41_39"
+                                        result="shape"
+                                    />
+                                </filter>
+                            </defs>
+                        </motion.svg>
+                    </>
+                )}
                 <motion.svg
                     className="wallet-illustration-svg"
                     width="364"
@@ -287,7 +669,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                     xmlns="http://www.w3.org/2000/svg"
                     variants={svgVariants}
                     initial="initial"
-                    animate={currentStep === 0 ? 'step1' : 'step2'}
+                    animate={currentStep === 0 ? 'step1' : currentStep === 1 ? 'step2' : 'step3'}
                 >
                     <path
                         fillRule="evenodd"
@@ -305,7 +687,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                     xmlns="http://www.w3.org/2000/svg"
                     variants={tokenVariants}
                     initial="hidden"
-                    animate={currentStep === 0 ? 'btcStep0' : 'btcStep1'}
+                    animate={currentStep === 0 ? 'btcStep0' : currentStep === 1 ? 'btcStep1' : 'hidden'}
                     exit="hidden"
                 >
                     <path
@@ -326,7 +708,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                     xmlns="http://www.w3.org/2000/svg"
                     variants={tokenVariants}
                     initial="hidden"
-                    animate={currentStep === 0 ? 'ethStep0' : 'ethStep1'}
+                    animate={currentStep === 0 ? 'ethStep0' : currentStep === 1 ? 'ethStep1' : 'hidden'}
                     exit="hidden"
                 >
                     <path
@@ -361,7 +743,7 @@ export const WalletIllustration: React.FC<WalletIllustrationProps> = ({
                     xmlns="http://www.w3.org/2000/svg"
                     variants={tokenVariants}
                     initial="hidden"
-                    animate={currentStep === 0 ? 'solStep0' : 'solStep1'}
+                    animate={currentStep === 0 ? 'solStep0' : currentStep === 1 ? 'solStep1' : 'hidden'}
                     exit="hidden"
                 >
                     <path

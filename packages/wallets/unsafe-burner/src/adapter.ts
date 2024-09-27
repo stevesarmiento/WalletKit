@@ -11,7 +11,7 @@ import { createSignInMessage } from '@solana/wallet-standard-util';
 import type { Transaction, TransactionVersion, VersionedTransaction } from '@solana/web3.js';
 import { Keypair } from '@solana/web3.js';
 
-export const UnsafeBurnerWalletName = 'No wallet? Use a burner' as WalletName<'No wallet? Use a burner'>;
+export const UnsafeBurnerWalletName = 'You can use a burner' as WalletName<'You can use a burner'>;
 
 /**
  * This burner wallet adapter is unsafe to use and is only included to provide an easy way for applications to test

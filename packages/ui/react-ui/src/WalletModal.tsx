@@ -197,6 +197,25 @@ export const WalletModal: FC<WalletModalProps> = ({ className = '', container = 
                                         }}
                                     >
                                         <h1 className="wallet-adapter-modal-title">Connect a wallet</h1>
+                                        {allWallets.some(
+                                            (wallet) => wallet.adapter.name !== UnsafeBurnerWalletName
+                                        ) ? null : (
+                                            <div className="wallet-adapter-modal-middle">
+                                                <WalletSVG />
+                                                <h1>No Wallets Detected</h1>
+                                                <p>
+                                                    You'll need add a wallet to your browser to interact with Solana if
+                                                    you want to continue using this app.
+                                                </p>
+                                                {/* <button className="wallet-info-learn-more">Learn More</button> */}
+                                                <div className="wallet-info-separator-container">
+                                                    <div className="wallet-info-separator" />
+                                                    <div className="wallet-info-navigation">
+                                                        <span className="text-xs">Don't want to connect one?</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                         <ul className="wallet-adapter-modal-list">
                                             {allWallets.map((wallet) => (
                                                 <WalletListItem
