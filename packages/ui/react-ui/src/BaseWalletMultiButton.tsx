@@ -1,6 +1,5 @@
 import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { BaseWalletConnectionButton } from './BaseWalletConnectionButton.js';
 import type { ButtonProps } from './Button.js';
 import { useWalletModal } from './useWalletModal.js';
@@ -18,22 +17,7 @@ type Props = ButtonProps & {
 };
 
 const AnimatedText = ({ content }: { content: React.ReactNode }) => (
-    <AnimatePresence mode="wait">
-        <motion.div
-            key={typeof content === 'string' ? content : JSON.stringify(content)}
-            initial={{ opacity: 0, x: -15 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 15 }}
-            transition={{
-                type: 'spring',
-                stiffness: 800,
-                damping: 35,
-                mass: 0.75,
-            }}
-        >
-            {content}
-        </motion.div>
-    </AnimatePresence>
+    <div key={typeof content === 'string' ? content : JSON.stringify(content)}>{content}</div>
 );
 
 export function BaseWalletMultiButton({ children, labels, ...props }: Props) {

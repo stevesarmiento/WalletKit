@@ -1,6 +1,6 @@
 {
     "name": "walletkit-react-ui",
-    "version": "0.1.4",
+    "version": "0.1.6",
     "author": "Solana Maintainers <maintainers@solana.foundation>",
     "repository": "https://github.com/stevesarmiento/WalletKit",
     "license": "Apache-2.0",
