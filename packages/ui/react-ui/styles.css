@@ -72,11 +72,11 @@
     grid-row-gap: 10px;
     padding: 10px;
     top: 100%;
-    right: 0;
+    right: -15px;
     margin: 0;
     list-style: none;
     background: #2c2d30;
-    border-radius: 10px;
+    border-radius: 15px;
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
     opacity: 0;
     visibility: hidden;
@@ -93,8 +93,9 @@
 .wallet-adapter-dropdown-list-item {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    gap: 10px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -102,7 +103,7 @@
     box-sizing: border-box;
     padding: 0 20px;
     width: 100%;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 14px;
     font-weight: 600;
     height: 37px;
@@ -110,17 +111,56 @@
 }
 
 .wallet-adapter-dropdown-list-item:not([disabled]):hover {
-    background-color: #1a1f2e;
+    background-color: #404040;
 }
 
-.wallet-adapter-modal-collapse-button svg {
-    align-self: center;
-    fill: #999;
+/* ... (existing styles) */
+
+.wallet-adapter-public-key {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 1);
+    font-family: monospace;
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
 }
 
-.wallet-adapter-modal-collapse-button.wallet-adapter-modal-collapse-button-active svg {
-    transform: rotate(180deg);
-    transition: transform ease-in 150ms;
+.wallet-adapter-dropdown-list-active .wallet-adapter-public-key {
+    opacity: 1;
+}
+
+.wallet-adapter-copy-button {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.wallet-adapter-copy-button:active {
+    transform: scale(0.95);
+}
+
+.wallet-adapter-copy-button:focus {
+    outline: none;
+}
+
+/* .wallet-adapter-copy-button-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+.wallet-adapter-copy-button-icon svg,
+.wallet-adapter-dropdown-list-item svg {
+    transition: all 0.15s ease-in-out;
+    fill: rgba(255, 255, 255, 0.5);
 }
 
 .wallet-adapter-modal {
